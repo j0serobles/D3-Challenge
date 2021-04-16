@@ -27,6 +27,8 @@ var chartGroup = svg.append("g")
 var chosenXAxis = "poverty";
 var chosenYAxis = "obesity";
 
+///////////////////////////
+
 // function used for updating x-scale var upon click on axis label
 function xScale(stateData, chosenXAxis) {
   // create scales
@@ -81,8 +83,11 @@ function renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYA
 
   circlesGroup.transition()
     .duration(1000)
-    .attr("cx", d => newXScale(d[chosenXAxis]))
-    .attr("cy", d => newYScale(d[chosenYAxis]));
+    .attr("transform", function(d) { 
+      return `translate(+${newXScale(d[chosenXAxis])},${newYScale(d[chosenYAxis])})`;
+    });
+    // .attr("x", d => newXScale(d[chosenXAxis]))
+    // .attr("y", d => newYScale(d[chosenYAxis]));
 
   return circlesGroup;
 }
@@ -126,7 +131,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
   
 
   var toolTip = d3.tip()
-    .attr("class", "tooltip")
+    .attr("class", "d3-tip")
     .offset([80, -60])
     .html(function(d) {
       return (`${d.state}<br>${xLabel} ${d[chosenXAxis]}<br>${yLabel} ${d[chosenYAxis]}`);
@@ -144,6 +149,8 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
   return circlesGroup;
 }
+
+//////////////////////////////
 
 // Retrieve data from the CSV file and execute everything below
 d3.csv("./assets/data/data.csv").then(function(stateData, err) {
@@ -185,16 +192,27 @@ d3.csv("./assets/data/data.csv").then(function(stateData, err) {
   var yAxis = chartGroup.append("g")
     .call(leftAxis);
 
-  // append initial circles
-  var circlesGroup = chartGroup.selectAll("circle")
+  // Append initial Circle + Text Group
+  var circlesGroup = chartGroup.selectAll("g")
     .data(stateData)
     .enter()
-    .append("circle")
-    .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    .attr("cy", d => yLinearScale(d[chosenYAxis]))
+    .append("g")
+    .attr("transform", function(d) { 
+      return `translate(+${xLinearScale(d[chosenXAxis])},${yLinearScale(d[chosenYAxis])})`;
+    });
+
+  // Append initial circles
+  circlesGroup.append("circle")
     .attr("r", 20)
-    .attr("fill", "pink")
-    .attr("opacity", ".5");
+    .classed("stateCircle", true);
+
+  //Add the text inside the circle
+  circlesGroup.append("text")
+    .text( d => d.abbr )
+    .classed('stateText', true)
+    .attr('dominant-baseline','middle');
+
+    circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
   // Create two groups for the axis labels
   // One for vertical and one for horizontal labels
@@ -263,7 +281,7 @@ d3.csv("./assets/data/data.csv").then(function(stateData, err) {
     .text("Lacks Healthcare (%)");
 
   // updateToolTip function
-  var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+  circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
   // x axis labels event listener
   xLabelsGroup.selectAll("text")
@@ -314,7 +332,6 @@ d3.csv("./assets/data/data.csv").then(function(stateData, err) {
         }
       }
     });
-
 
   // y axis labels event listener
   yLabelsGroup.selectAll("text")
