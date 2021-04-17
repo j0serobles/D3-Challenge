@@ -35,6 +35,18 @@ This chart includes more demographics and more risk factors. Labels  are placed 
 
 While the ticks on the axes allow us to infer approximate values for each circle, it's impossible to determine the true value without adding another layer of data. Enter tooltips: developers can implement these in their D3 graphics to reveal a specific element's data when the user hovers their cursor over the element. We have added tooltips to the circles, and display each one when the user hovers over the circle. 
 
+
+### Notes:
+There are two sets of files for each of the homework assignments:
+
+`index.html` - Contains the HTML page for the Core assignment (Static Scatter plot).
+
+`apps.js`    - Contains the Javascript logic for the Core assignment.
+
+`index2.html` - Contains the HTML for the dynamic part (Optional Assignment).
+
+`apps2.js` - Contains the Javascript logic for the dynamic part. 
+
 - - -
 ### Copyright
 
