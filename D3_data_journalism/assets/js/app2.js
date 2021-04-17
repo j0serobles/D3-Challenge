@@ -86,8 +86,6 @@ function renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYA
     .attr("transform", function(d) { 
       return `translate(+${newXScale(d[chosenXAxis])},${newYScale(d[chosenYAxis])})`;
     });
-    // .attr("x", d => newXScale(d[chosenXAxis]))
-    // .attr("y", d => newYScale(d[chosenYAxis]));
 
   return circlesGroup;
 }
@@ -130,20 +128,21 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
   }
   
 
-  var toolTip = d3.tip()
+  let toolTip = d3.tip()
     .attr("class", "d3-tip")
     .offset([80, -60])
     .html(function(d) {
       return (`${d.state}<br>${xLabel} ${d[chosenXAxis]}<br>${yLabel} ${d[chosenYAxis]}`);
     });
 
+
   circlesGroup.call(toolTip);
 
   circlesGroup.on("mouseover", function(data) {
-    toolTip.show(data);
-  })
-    // onmouseout event
-    .on("mouseout", function(data, index) {
+    toolTip.show(data, this);
+  });
+
+  circlesGroup.on("mouseout", function(data, index) {
       toolTip.hide(data);
     });
 
@@ -212,14 +211,15 @@ d3.csv("./assets/data/data.csv").then(function(stateData, err) {
     .classed('stateText', true)
     .attr('dominant-baseline','middle');
 
-    circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
+  circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+  circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
   // Create two groups for the axis labels
   // One for vertical and one for horizontal labels
   var xLabelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${width / 2}, ${height + 20})`);
   var yLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate( 20 , ${height/2} )`);
+    .attr("transform", `translate( 20 , 0 )`);
 
   // Define three labels for each of the dimensions in x axis:
   // In Poverty %
@@ -280,9 +280,6 @@ d3.csv("./assets/data/data.csv").then(function(stateData, err) {
     .classed("inactive", true)
     .text("Lacks Healthcare (%)");
 
-  // updateToolTip function
-  circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
-
   // x axis labels event listener
   xLabelsGroup.selectAll("text")
     .on("click", function() {
@@ -293,8 +290,6 @@ d3.csv("./assets/data/data.csv").then(function(stateData, err) {
 
         // replaces chosenXAxis with value
         chosenXAxis = value;
-
-        // console.log(chosenXAxis)
 
         // functions here found above csv import
         // updates x scale for new data
@@ -338,13 +333,10 @@ d3.csv("./assets/data/data.csv").then(function(stateData, err) {
   .on("click", function() {
     // get value of selection
     var value = d3.select(this).attr("value");
-    console.log(value);
     if (value !== chosenYAxis) {
 
       // replaces chosenXAxis with value
       chosenYAxis = value;
-
-      // console.log(chosenXAxis)
 
       // functions here found above 
       // updates y scale for new data
