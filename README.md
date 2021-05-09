@@ -47,6 +47,27 @@ There are two sets of files for each of the homework assignments:
 
 `apps2.js` - Contains the Javascript logic for the dynamic part. 
 
+
+### How to run it
+
+1) Clone the [repository]( ) to your local machine.
+2) Activate the http background process that will serve the application.  You can use LiveServer or a Python HTTP server if installed:
+
+LiveServer
+
+* Open the project directory with VS code.
+
+* Right click on file ```index.html```, and select "Open With Live Server".  The landing page will be displayed in your default web browser at URL address = http://localhost:5000/index.html.
+
+![LiveServer](Images/run1.gif)
+	
+Python http Server
+
+* From VS Code, right click on file ```runServer.sh``` and select "Open In Integrated Terminal".
+*  Activate your Python environment in the terminal window that opens, if it is not automatically activated.
+*  type ```./runServer.sh```,  This will activate the HTTP server and the home page will be available in http://localhost:8000/index.html by default (The port name can change, depending on other programs using port 8000).
+	
+![PythonHTTP](Images/run2.gif)	
 - - -
 ### Copyright
 
