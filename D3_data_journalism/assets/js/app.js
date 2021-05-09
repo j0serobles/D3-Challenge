@@ -76,7 +76,7 @@ d3.csv("./assets/data/data.csv").then(function(censusData) {
 
     // Add the circle using this helper function
     textCirGroup.append("circle")
-    .attr('r', 20)
+    .attr('r', 15)
     .classed('stateCircle', true);
 
     //Add the text inside the circle
