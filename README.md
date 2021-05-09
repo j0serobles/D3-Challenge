@@ -39,7 +39,9 @@ While the ticks on the axes allow us to infer approximate values for each circle
 ### Notes:
 There are two sets of files for each of the homework assignments:
 
-`index.html` - Contains the HTML page for the Core assignment (Static Scatter plot).
+`index.html` - Landing page, contains links to other pages. 
+
+`index1.html` - Contains the HTML page for the Core assignment (Static Scatter plot).
 
 `apps.js`    - Contains the Javascript logic for the Core assignment.
 
